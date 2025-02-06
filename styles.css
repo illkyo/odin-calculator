@@ -1,7 +1,59 @@
-.blue {
-  color: blue;
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 95vh;
+  justify-content: center;
 }
 
-.red {
-  color: red;
+.calculator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  height: 400px;
+  width: 250px;
+  gap: 30px;
+  border: 5px solid black;
+}
+
+.display {
+  display: flex;
+  justify-content: flex-end;
+  padding: 5px;
+  height: 50px;
+  align-items: center;
+  width: 100%;
+  border: 3px solid black;
+}
+
+span {
+  font-size: 24px;
+}
+
+.clear {
+  color: rgb(255, 174, 0);
+}
+
+.buttons {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.digits,
+.operators {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.digits button {
+  width: 55px;
+  height: 55px;
+}
+
+.operators button {
+  width: 40px;
+  height: 40px;
 }
