@@ -19,25 +19,14 @@
 //   }
 //   digitsContainer.appendChild(rowContainer);
 // }
-const buttons = document.querySelectorAll('button');
+const digitButtons = document.querySelectorAll('.digits button');
+const operatorButtons = document.querySelectorAll('.operators button');
 const display = document.querySelector('.display');
+const maxDisplayLength = 252;
 
-buttons.forEach((button) => {
-  if (button.classList.item(0) === 'clear' || button.classList.item(0) === 'equals') {
-    button.addEventListener('click', () => {
-      display.textContent = '';
-    })
-  } else {
-    button.addEventListener('click', (event) => {
-      if (display.children.length <= 20) {
-        const displayValue =  document.createElement('span');
-        displayValue.textContent = event.target.textContent;
-        
-        display.appendChild(displayValue);
-      }
-    })
-  }
-})
+let num1;
+let operator;
+let num2;
 
 function add(num1, num2) {
   return num1 + num2
@@ -55,20 +44,82 @@ function divide(num1, num2) {
   return num1 / num2
 }
 
-let num1;
-let operator;
-let num2;
-
 function operate(num1, operator, num2) {
-  let result;
   if (operator === '+') {
-    result = add(num1, num2);
+    return add(num1, num2);
   } else if (operator === '-') {
-    result = subtract(num1, num2);
+    return subtract(num1, num2);
   } else if (operator === 'x') {
-    result = multiply(num1, num2);
+    return multiply(num1, num2);
   } else {
-    result = divide(num1, num2);
+    return divide(num1, num2);
   }
-  return result
 }
+
+digitButtons.forEach((button) => {
+  button.addEventListener('click', (event) => {
+    if (display.children[0] && !display.children[2]) {
+      if (display.children[0].clientWidth < maxDisplayLength) {
+        display.children[0].textContent += event.target.textContent;
+      }
+    } else if (display.children[2]) {
+        if ((display.children[0].clientWidth + display.children[1].clientWidth + display.children[2].clientWidth) < maxDisplayLength) {
+          display.children[2].textContent += event.target.textContent;
+        }
+    } else {
+        const displayValueNumber1 = document.createElement('span');
+        displayValueNumber1.textContent = event.target.textContent;
+        display.appendChild(displayValueNumber1);
+    }
+  })
+})
+
+operatorButtons.forEach((button) => {
+  if (button.classList.item(0) === 'clear') {
+    button.addEventListener('click', () => {
+      display.textContent = '';
+    })
+  } else if (button.classList.item(0) === 'equals') {
+      button.addEventListener('click', () => {
+        if (display.children.length === 3) {
+          num1 = +display.children[0].textContent;
+          operator = display.children[1].textContent;
+          num2 = +display.children[2].textContent;
+
+          display.textContent = '';
+          const displayValueNumber1 = document.createElement('span');
+          displayValueNumber1.textContent = operate(num1, operator, num2);
+
+          display.appendChild(displayValueNumber1);
+        }
+      })
+  } else {
+      button.addEventListener('click', (event) => {
+        if (display.children[0] && !display.children[1]) {
+          const displayValueOperator = document.createElement('span');
+          displayValueOperator.textContent = event.target.textContent;
+          display.appendChild(displayValueOperator);
+    
+          const displayValueNumber2 = document.createElement('span');
+          display.appendChild(displayValueNumber2);
+        } else if (display.children[2].textContent) {
+            num1 = +display.children[0].textContent;
+            operator = display.children[1].textContent;
+            num2 = +display.children[2].textContent;
+
+            display.textContent = '';
+            const displayValueNumber1 = document.createElement('span');
+            displayValueNumber1.textContent = operate(num1, operator, num2);
+
+            display.appendChild(displayValueNumber1);
+
+            const displayValueOperator = document.createElement('span');
+            displayValueOperator.textContent = event.target.textContent;
+            display.appendChild(displayValueOperator);
+      
+            const displayValueNumber2 = document.createElement('span');
+            display.appendChild(displayValueNumber2);
+        }
+      })
+  }
+})
