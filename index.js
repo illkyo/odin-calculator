@@ -114,20 +114,22 @@ operatorButtons.forEach((button) => {
       })
   } else if (button.classList.item(0) === 'backspace') {
       button.addEventListener('click', () => {
-        if (display.children[2]) {
-          if (display.children[2].textContent.length === 1) {
-            display.removeChild(display.children[2]);
-          } else {
-            display.children[2].textContent = display.children[2].textContent.slice(0, -1);
-          }
-        } else if (display.children[1]) {
-            display.removeChild(display.children[1]);
-        } else if (display.children[0]) {
-            if (display.children[0].textContent.length === 1) {
-              display.removeChild(display.children[0]);
+        if (display.children) {
+          if (display.children[2]) {
+            if (display.children[2].textContent.length === 1) {
+              display.removeChild(display.children[2]);
             } else {
-              display.children[0].textContent = display.children[0].textContent.slice(0, -1);
+              display.children[2].textContent = display.children[2].textContent.slice(0, -1);
             }
+          } else if (display.children[1]) {
+              display.removeChild(display.children[1]);
+          } else if (display.children[0]) {
+              if (display.children[0].textContent.length === 1) {
+                display.removeChild(display.children[0]);
+              } else {
+                display.children[0].textContent = display.children[0].textContent.slice(0, -1);
+              }
+          }
         }
       })
   } else {
@@ -152,5 +154,29 @@ operatorButtons.forEach((button) => {
             display.appendChild(displayValueOperator);
         }
       })
+  }
+})
+
+window.addEventListener('keydown', (event) => {
+  if (!isNaN(event.key)) {
+    document.querySelector(`.digit-${event.key}`).click();
+  } else {
+      if (event.key === '+') {
+        document.querySelector('.add').click();
+      } else if (event.key === '-') {
+          document.querySelector('.subtract').click();
+      } else if (event.key === '*') {
+          document.querySelector('.multiply').click();
+      } else if (event.key === '/') {
+          document.querySelector('.divide').click();
+      } else if (event.key === 'Enter') {
+          document.querySelector('.equals').click();
+      } else if (event.key === 'Backspace') {
+          document.querySelector('.backspace').click();
+      } else if (event.key === '.') {
+          document.querySelector('.decimal').click();
+      } else if (event.key === 'Control') {
+          document.querySelector('.clear').click();
+      }
   }
 })
