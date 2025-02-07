@@ -57,21 +57,35 @@ function operate(num1, operator, num2) {
 }
 
 digitButtons.forEach((button) => {
-  button.addEventListener('click', (event) => {
-    if (display.children[0] && !display.children[2]) {
-      if (display.children[0].clientWidth < maxDisplayLength) {
-        display.children[0].textContent += event.target.textContent;
-      }
-    } else if (display.children[2]) {
+  if (button.classList.item(1) === 'decimal') {
+    button.addEventListener('click', (event) => {
+      if (display.children[2] && !display.children[2].textContent.includes('.')) {
         if ((display.children[0].clientWidth + display.children[1].clientWidth + display.children[2].clientWidth) < maxDisplayLength) {
           display.children[2].textContent += event.target.textContent;
         }
-    } else {
-        const displayValueNumber1 = document.createElement('span');
-        displayValueNumber1.textContent = event.target.textContent;
-        display.appendChild(displayValueNumber1);
-    }
-  })
+      } else if (display.children[0] && !display.children[0].textContent.includes('.')) {
+          if (display.children[0].clientWidth < maxDisplayLength) {
+            display.children[0].textContent += event.target.textContent;
+          }
+      } 
+    })
+  } else {
+      button.addEventListener('click', (event) => {
+        if (display.children[2]) {
+          if ((display.children[0].clientWidth + display.children[1].clientWidth + display.children[2].clientWidth) < maxDisplayLength) {
+            display.children[2].textContent += event.target.textContent;
+          }
+        } else if (display.children[0]) {
+            if (display.children[0].clientWidth < maxDisplayLength) {
+              display.children[0].textContent += event.target.textContent;
+            }
+        } else {
+            const displayValueNumber1 = document.createElement('span');
+            displayValueNumber1.textContent = event.target.textContent;
+            display.appendChild(displayValueNumber1);
+        }
+      })
+  }
 })
 
 operatorButtons.forEach((button) => {
@@ -81,7 +95,7 @@ operatorButtons.forEach((button) => {
     })
   } else if (button.classList.item(0) === 'equals') {
       button.addEventListener('click', () => {
-        if (display.children.length === 3) {
+        if (display.children.length === 3 && display.children[2].textContent) {
           num1 = +display.children[0].textContent;
           operator = display.children[1].textContent;
           num2 = +display.children[2].textContent;
@@ -95,14 +109,15 @@ operatorButtons.forEach((button) => {
       })
   } else {
       button.addEventListener('click', (event) => {
-        if (display.children[0] && !display.children[1]) {
+        if (display.children[0] && !display.children[0].textContent.endsWith('.') && !display.children[1]) {
           const displayValueOperator = document.createElement('span');
           displayValueOperator.textContent = event.target.textContent;
           display.appendChild(displayValueOperator);
     
           const displayValueNumber2 = document.createElement('span');
           display.appendChild(displayValueNumber2);
-        } else if (display.children[2].textContent) {
+
+        } else if (display.children[2].textContent && !display.children[2].textContent.endsWith('.')) {
             num1 = +display.children[0].textContent;
             operator = display.children[1].textContent;
             num2 = +display.children[2].textContent;
