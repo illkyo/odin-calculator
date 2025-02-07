@@ -75,6 +75,11 @@ digitButtons.forEach((button) => {
           if ((display.children[0].clientWidth + display.children[1].clientWidth + display.children[2].clientWidth) < maxDisplayLength) {
             display.children[2].textContent += event.target.textContent;
           }
+        } else if (display.children[1]) {
+            const displayValueNumber2 = document.createElement('span');
+            displayValueNumber2.textContent = event.target.textContent;
+            display.appendChild(displayValueNumber2);
+
         } else if (display.children[0]) {
             if (display.children[0].clientWidth < maxDisplayLength) {
               display.children[0].textContent += event.target.textContent;
@@ -107,15 +112,30 @@ operatorButtons.forEach((button) => {
           display.appendChild(displayValueNumber1);
         }
       })
+  } else if (button.classList.item(0) === 'backspace') {
+      button.addEventListener('click', () => {
+        if (display.children[2]) {
+          if (display.children[2].textContent.length === 1) {
+            display.removeChild(display.children[2]);
+          } else {
+            display.children[2].textContent = display.children[2].textContent.slice(0, -1);
+          }
+        } else if (display.children[1]) {
+            display.removeChild(display.children[1]);
+        } else if (display.children[0]) {
+            if (display.children[0].textContent.length === 1) {
+              display.removeChild(display.children[0]);
+            } else {
+              display.children[0].textContent = display.children[0].textContent.slice(0, -1);
+            }
+        }
+      })
   } else {
       button.addEventListener('click', (event) => {
         if (display.children[0] && !display.children[0].textContent.endsWith('.') && !display.children[1]) {
           const displayValueOperator = document.createElement('span');
           displayValueOperator.textContent = event.target.textContent;
           display.appendChild(displayValueOperator);
-    
-          const displayValueNumber2 = document.createElement('span');
-          display.appendChild(displayValueNumber2);
 
         } else if (display.children[2].textContent && !display.children[2].textContent.endsWith('.')) {
             num1 = +display.children[0].textContent;
@@ -125,15 +145,11 @@ operatorButtons.forEach((button) => {
             display.textContent = '';
             const displayValueNumber1 = document.createElement('span');
             displayValueNumber1.textContent = operate(num1, operator, num2);
-
             display.appendChild(displayValueNumber1);
 
             const displayValueOperator = document.createElement('span');
             displayValueOperator.textContent = event.target.textContent;
             display.appendChild(displayValueOperator);
-      
-            const displayValueNumber2 = document.createElement('span');
-            display.appendChild(displayValueNumber2);
         }
       })
   }
